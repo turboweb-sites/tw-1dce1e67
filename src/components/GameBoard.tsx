@@ -1,9 +1,13 @@
-import { useSnakeGame } from '../hooks/useSnakeGame';
 import { BOARD_SIZE } from '../types/game';
+import { GameState, Position } from '../types/game';
 
-export default function GameBoard() {
-  const { snake, food, gameState } = useSnakeGame();
+interface GameBoardProps {
+  snake: Position[];
+  food: Position;
+  gameState: GameState;
+}
 
+export default function GameBoard({ snake, food, gameState }: GameBoardProps) {
   const renderCell = (row: number, col: number) => {
     const isSnakeHead = snake[0]?.x === col && snake[0]?.y === row;
     const isSnakeBody = snake.slice(1).some(segment => segment.x === col && segment.y === row);

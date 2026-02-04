@@ -8,6 +8,8 @@ import { Gamepad2 } from 'lucide-react';
 export default function Game() {
   const {
     gameState,
+    snake,
+    food,
     score,
     highScore,
     startGame,
@@ -50,7 +52,7 @@ export default function Game() {
 
       <div className="grid lg:grid-cols-[1fr_300px] gap-8">
         <div className="space-y-4">
-          <GameBoard />
+          <GameBoard snake={snake} food={food} gameState={gameState} />
           <GameControls
             gameState={gameState}
             onStart={startGame}
