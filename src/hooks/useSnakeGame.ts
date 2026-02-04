@@ -1,14 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { GameState, Position, Direction, BOARD_SIZE, INITIAL_SPEED } from '../types/game';
 
-let gameInstance: ReturnType<typeof useSnakeGame> | null = null;
-
 export function useSnakeGame() {
-  // Return singleton instance if it exists
-  if (gameInstance) {
-    return gameInstance;
-  }
-
   const [gameState, setGameState] = useState<GameState>('idle');
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 15, y: 15 });
@@ -151,7 +144,7 @@ export function useSnakeGame() {
     };
   }, [gameState, speed, moveSnake]);
 
-  gameInstance = {
+  return {
     gameState,
     snake,
     food,
@@ -163,6 +156,4 @@ export function useSnakeGame() {
     resumeGame,
     changeDirection
   };
-
-  return gameInstance;
 }
