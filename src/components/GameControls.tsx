@@ -1,100 +1,94 @@
-import { Play, Pause, RotateCcw, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
-import { GameState } from '../types/game';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
+import { GameState, Direction } from '../types/game';
 
 interface GameControlsProps {
   gameState: GameState;
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
-  onDirectionChange: (key: string) => void;
+  onDirectionChange: (direction: Direction) => void;
 }
 
-export default function GameControls({ 
-  gameState, 
-  onStart, 
-  onPause, 
+export default function GameControls({
+  gameState,
+  onStart,
+  onPause,
   onResume,
-  onDirectionChange 
+  onDirectionChange,
 }: GameControlsProps) {
-  const handleDirectionClick = (direction: string) => {
-    if (gameState === 'playing') {
-      onDirectionChange(direction);
-    }
-  };
+  const isPlaying = gameState === GameState.PLAYING;
+  const isPaused = gameState === GameState.PAUSED;
+  const isGameOver = gameState === GameState.GAME_OVER;
+  const isIdle = gameState === GameState.IDLE;
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-4 justify-center">
-        {gameState === 'idle' || gameState === 'gameOver' ? (
+    <div className="flex flex-col items-center gap-4">
+      {/* Game Control Buttons */}
+      <div className="flex gap-4">
+        {(isIdle || isGameOver) && (
           <button
             onClick={onStart}
             className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
           >
             <Play className="w-5 h-5" />
-            Новая игра
+            {isGameOver ? 'Play Again' : 'Start Game'}
           </button>
-        ) : gameState === 'playing' ? (
+        )}
+        
+        {isPlaying && (
           <button
             onClick={onPause}
             className="flex items-center gap-2 px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg transition-colors"
           >
             <Pause className="w-5 h-5" />
-            Пауза
-          </button>
-        ) : (
-          <button
-            onClick={onResume}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-          >
-            <Play className="w-5 h-5" />
-            Продолжить
+            Pause
           </button>
         )}
         
-        {gameState === 'gameOver' && (
+        {isPaused && (
           <button
-            onClick={onStart}
-            className="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors"
+            onClick={onResume}
+            className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
           >
-            <RotateCcw className="w-5 h-5" />
-            Заново
+            <Play className="w-5 h-5" />
+            Resume
           </button>
         )}
       </div>
 
-      {/* Mobile controls */}
-      <div className="grid grid-cols-3 gap-2 max-w-[200px] mx-auto lg:hidden">
+      {/* Direction Controls (for mobile) */}
+      <div className="grid grid-cols-3 gap-2 md:hidden">
         <div />
         <button
-          onClick={() => handleDirectionClick('ArrowUp')}
-          className="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+          onClick={() => onDirectionChange('UP')}
+          disabled={!isPlaying}
+          className="p-4 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:opacity-50 text-white rounded-lg transition-colors"
         >
-          <ArrowUp className="w-6 h-6 mx-auto" />
+          <ArrowUp className="w-6 h-6" />
         </button>
         <div />
         
         <button
-          onClick={() => handleDirectionClick('ArrowLeft')}
-          className="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+          onClick={() => onDirectionChange('LEFT')}
+          disabled={!isPlaying}
+          className="p-4 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:opacity-50 text-white rounded-lg transition-colors"
         >
-          <ArrowLeft className="w-6 h-6 mx-auto" />
+          <ArrowLeft className="w-6 h-6" />
         </button>
-        <div />
         <button
-          onClick={() => handleDirectionClick('ArrowRight')}
-          className="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+          onClick={() => onDirectionChange('DOWN')}
+          disabled={!isPlaying}
+          className="p-4 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:opacity-50 text-white rounded-lg transition-colors"
         >
-          <ArrowRight className="w-6 h-6 mx-auto" />
+          <ArrowDown className="w-6 h-6" />
         </button>
-        
-        <div />
         <button
-          onClick={() => handleDirectionClick('ArrowDown')}
-          className="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+          onClick={() => onDirectionChange('RIGHT')}
+          disabled={!isPlaying}
+          className="p-4 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:opacity-50 text-white rounded-lg transition-colors"
         >
-          <ArrowDown className="w-6 h-6 mx-auto" />
+          <ArrowRight className="w-6 h-6" />
         </button>
-        <div />
       </div>
     </div>
   );

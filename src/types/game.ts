@@ -1,11 +1,13 @@
-export type GameState = 'idle' | 'playing' | 'paused' | 'gameOver';
-
-export type Direction = 'up' | 'down' | 'left' | 'right';
-
 export interface Position {
   x: number;
   y: number;
 }
 
-export const BOARD_SIZE = 20;
-export const INITIAL_SPEED = 150;
+export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+
+export enum GameState {
+  IDLE = 'IDLE',
+  PLAYING = 'PLAYING',
+  PAUSED = 'PAUSED',
+  GAME_OVER = 'GAME_OVER',
+}
